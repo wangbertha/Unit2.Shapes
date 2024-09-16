@@ -3,8 +3,8 @@
 // We call this data "state" because it represents the state of our program.
 
 // TODO: Add support for more colors
-const colors = ["red", "green", "blue"];
-const sizes = ["small", "medium", "large"];
+const colors = ["red", "green", "blue", "orange", "yellow", "purple"];
+const sizes = ["small", "medium", "large", "extra-large"];
 const maxShapes = 10;
 const shapes = [
   {
@@ -39,6 +39,16 @@ function render() {
   squares.replaceChildren(...squareElements);
 
   // TODO: Render the circles
+  const circles = document.querySelector("#circles");
+  const circleElements = shapes.map((shape) => {
+    const element = document.createElement("li");
+    element.classList.add(shape.color, shape.size);
+    return element;
+  })
+  circles.replaceChildren(...circleElements);
+
+  const message = document.querySelector("#message");
+  message.textContent = `The current count is ${shapes.length} shapes.`;
 }
 
 /**
@@ -46,12 +56,18 @@ function render() {
  */
 function addShape() {
   const color = colors[Math.floor(Math.random() * colors.length)];
+  const size = sizes[Math.floor(Math.random() * sizes.length)];
 
   // TODO: Randomize the size of the shape
 
-  shapes.push({ color, size: "small" });
+  shapes.push({ color, size });
 
   render();
 
   // TODO: Stop adding shapes if we've reached the maximum number of shapes
+  if (shapes.length >= maxShapes) {
+    clearInterval(addShapeIntervalId);
+    const message = document.querySelector("#message");
+    message.textContent = `The maximum number of shapes has been reached! (${shapes.length} shapes)`;
+  }
 }
